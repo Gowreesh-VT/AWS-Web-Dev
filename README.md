@@ -12,6 +12,18 @@ CineMood AI uses the power of Google's Gemini Flash 2.5 (via Genkit) to understa
 - **Search History**: revisit your past moods and recommendations.
 - **Responsive Design**: Built with a mobile-first approach using Tailwind CSS and shadcn/ui.
 
+## 📸 Screenshots
+
+### Home & Mood Input
+![Home Page](./images/Home%20Page.png)
+
+### AI Recommendations
+![Search Results](./images/Search.png)
+
+### Favorites & History
+![Favorites](./images/Favourites.png)
+![History](./images/History.png)
+
 ## 🛠️ Tech Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
