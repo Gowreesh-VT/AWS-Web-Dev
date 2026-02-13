@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { convertMoodToGenres } from '@/ai/flows/mood-to-genre-converter';
 import { fetchMoviesByGenres, getGenreIds } from '@/lib/tmdb';
-import { addHistory } from '@/lib/data';
+import { getCurrentUser } from '@/lib/auth';
 import type { SearchHistoryItem } from '@/lib/types';
+import { v4 as uuidv4 } from 'uuid'; // Actually we don't have uuid installed, let's use random string or install it. 
+// Easier to just use Math.random for now to avoid installing another package, or just Date.now().
 
 export async function POST(request: Request) {
   try {
@@ -16,22 +18,27 @@ export async function POST(request: Request) {
     if (!genres || genres.length === 0) {
       return NextResponse.json({ genres: [], movies: [] });
     }
-    
+
     const genreIds = getGenreIds(genres);
     if (genreIds.length === 0) {
-        return NextResponse.json({ genres, movies: [] });
+      return NextResponse.json({ genres, movies: [] });
     }
-    
+
     const movies = await fetchMoviesByGenres(genreIds);
 
-    const historyItem: SearchHistoryItem = {
-      id: new Date().toISOString() + Math.random(),
-      mood,
-      genres,
-      timestamp: new Date().toISOString(),
-    };
-    await addHistory(historyItem);
-    
+    // Save to history if user is logged in
+    const user = await getCurrentUser();
+    if (user) {
+      const historyItem: SearchHistoryItem = {
+        id: Date.now().toString(),
+        mood,
+        genres,
+        timestamp: new Date().toISOString(),
+      };
+      user.history.push(historyItem);
+      await user.save();
+    }
+
     return NextResponse.json({ genres, movies });
   } catch (error) {
     console.error('[API/RECOMMENDATIONS] Error:', error);

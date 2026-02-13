@@ -1,126 +1,69 @@
-"use client";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
-import { useState, useEffect } from 'react';
-import { MoodForm } from '@/components/movies/mood-form';
-import { MovieList } from '@/components/movies/movie-list';
-import { GenrePills } from '@/components/movies/genre-pills';
-import type { Movie } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
-
-export default function Home() {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [genres, setGenres] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [searched, setSearched] = useState(false);
-  const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
-
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const response = await fetch('/api/favorites');
-        if (!response.ok) {
-          console.error('Failed to fetch favorites.');
-          return;
-        }
-        const data: Movie[] = await response.json();
-        setFavoriteIds(data.map(m => m.id));
-      } catch (err) {
-        console.error(err instanceof Error ? err.message : 'An unknown error occurred while fetching favorites.');
-      }
-    };
-    fetchFavorites();
-  }, []);
-
-  const handleFavoriteChange = (movie: Movie, isFavorite: boolean) => {
-    setFavoriteIds(currentIds => 
-      isFavorite 
-        ? [...currentIds, movie.id]
-        : currentIds.filter(id => id !== movie.id)
-    );
-  };
-
-  const handleMoodSubmit = async (mood: string) => {
-    setIsLoading(true);
-    setError(null);
-    setSearched(true);
-    setMovies([]);
-    setGenres([]);
-    try {
-      const response = await fetch('/api/recommendations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mood }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to get recommendations.');
-      }
-
-      const data = await response.json();
-      setMovies(data.movies);
-      setGenres(data.genres);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+export default function LandingPage() {
   return (
-    <div className="container mx-auto py-8 px-4">
-      <Card className="max-w-4xl mx-auto mb-8 shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-center text-3xl font-bold font-headline">How are you feeling today?</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-center text-muted-foreground mb-6">
-            Tell us your mood, and our AI will find the perfect movies for you.
-          </p>
-          <MoodForm onSubmit={handleMoodSubmit} isLoading={isLoading} />
-        </CardContent>
-      </Card>
-
-      {isLoading && (
-         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-wrap gap-2 mb-6 justify-center items-center">
-            <span className="text-sm font-medium text-muted-foreground self-center">Generating genres...</span>
-            <Skeleton className="h-6 w-20" />
-            <Skeleton className="h-6 w-24" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <Skeleton key={i} className="h-[420px] rounded-lg" />
-            ))}
-          </div>
-        </div>
-      )}
-      
-      {error && (
-        <Alert variant="destructive" className="max-w-4xl mx-auto">
-          <Terminal className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
-      {searched && !isLoading && !error && (
-        <div className="max-w-6xl mx-auto">
-          {genres.length > 0 && <GenrePills genres={genres} />}
-          {movies.length > 0 ? (
-            <MovieList movies={movies} onFavoriteChange={handleFavoriteChange} favoriteIds={favoriteIds} />
-          ) : (
-            <div className="text-center text-muted-foreground py-16">
-              <h3 className="text-lg font-semibold">No movies found</h3>
-              <p>We couldn't find any movies for the genres: {genres.join(', ')}. Try a different mood!</p>
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-1">
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-background flex flex-col items-center justify-center text-center px-4 md:px-6">
+          <div className="space-y-4 max-w-3xl">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+              CineMood AI
+            </h1>
+            <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl dark:text-gray-400">
+              Stop scrolling, start watching. Let our AI find the perfect movie for your exact mood.
+            </p>
+            <div className="space-x-4">
+              <Link href="/login">
+                <Button size="lg" className="bg-white text-black hover:bg-gray-200">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button variant="outline" size="lg">
+                  Sign Up
+                </Button>
+              </Link>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        </section>
+
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-900/50">
+          <div className="container px-4 md:px-6 mx-auto">
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold">Mood Analysis</h3>
+                <p className="text-gray-400">
+                  Type how you feel, and our AI understands the nuance to recommend genres that match.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold">Smart Recommendations</h3>
+                <p className="text-gray-400">
+                  We verify recommendations against real movie databases to ensure you get top-quality suggestions.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold">Personalized Library</h3>
+                <p className="text-gray-400">
+                  Save your favorites and track your mood history to see what you've been watching.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t border-gray-800">
+        <p className="text-xs text-gray-500 dark:text-gray-400">© 2024 CineMood AI. All rights reserved.</p>
+        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
+          <Link className="text-xs hover:underline underline-offset-4 text-gray-400" href="#">
+            Terms of Service
+          </Link>
+          <Link className="text-xs hover:underline underline-offset-4 text-gray-400" href="#">
+            Privacy
+          </Link>
+        </nav>
+      </footer>
     </div>
   );
 }
