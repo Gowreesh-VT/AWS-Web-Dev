@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMood AI — Full Stack Submission</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-2: #1a1a26;
+            --border: #2a2a3a;
+            --text: #e4e4ef;
+            --text-muted: #8888a0;
+            --accent: #7c5cfc;
+            --accent-light: #a78bfa;
+            --accent-glow: rgba(124, 92, 252, 0.15);
+            --green: #34d399;
+            --orange: #fb923c;
+            --red: #f87171;
+            --blue: #60a5fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 40px 60px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        @media print {
+            body { padding: 20px 30px; }
+            .page-break { page-break-before: always; }
+            .no-break { page-break-inside: avoid; }
+        }
+
+        /* ── Header ── */
+        .header {
+            text-align: center;
+            padding: 50px 0 40px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 50px;
+        }
+
+        .header .club-badge {
+            display: inline-block;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent-light);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .header .subtitle {
+            font-size: 18px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .header .meta-row {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .meta-item strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* ── Sections ── */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--accent-glow);
+            border: 1px solid var(--accent);
+            color: var(--accent-light);
+            font-size: 15px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* ── Cards & Content ── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 16px;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 28px;
+        }
+
+        .link-card .link-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .link-card .link-info { flex: 1; }
+
+        .link-card .link-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .link-card .link-url {
+            color: var(--accent-light);
+            font-weight: 500;
+            word-break: break-all;
+            text-decoration: none;
+        }
+
+        .link-card .link-url:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Tech Stack Grid ── */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .tech-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        .tech-card .tech-category {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-light);
+            margin-bottom: 12px;
+        }
+
+        .tech-card ul {
+            list-style: none;
+        }
+
+        .tech-card ul li {
+            padding: 5px 0;
+            font-size: 14px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tech-card ul li::before {
+            content: '›';
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* ── API Table ── */
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .api-table thead {
+            background: var(--surface-2);
+        }
+
+        .api-table th {
+            text-align: left;
+            padding: 14px 18px;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .api-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .api-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .method-get {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--green);
+        }
+
+        .method-post {
+            background: rgba(96, 165, 250, 0.15);
+            color: var(--blue);
+        }
+
+        .method-delete {
+            background: rgba(248, 113, 113, 0.15);
+            color: var(--red);
+        }
+
+        .endpoint-path {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 13px;
+            color: var(--accent-light);
+        }
+
+        .auth-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-yes {
+            background: rgba(251, 146, 60, 0.15);
+            color: var(--orange);
+        }
+
+        .auth-no {
+            background: rgba(52, 211, 153, 0.1);
+            color: var(--green);
+        }
+
+        /* ── Code Block ── */
+        .code-block {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 24px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 13.5px;
+            line-height: 1.8;
+            overflow-x: auto;
+            color: var(--text);
+        }
+
+        .code-block .comment {
+            color: var(--text-muted);
+        }
+
+        .code-block .cmd {
+            color: var(--green);
+        }
+
+        /* ── Screenshots ── */
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        .screenshot-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .screenshot-caption {
+            padding: 16px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .screenshot-caption .caption-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        /* ── Design Section ── */
+        .design-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 32px;
+        }
+
+        .design-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--accent-light);
+        }
+
+        .design-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .design-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .design-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .design-feature {
+            background: var(--surface-2);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .design-feature .feat-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .design-feature .feat-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════ HEADER ═══════════ -->
+    <div class="header">
+        <div class="club-badge">AWS Cloud Club · VIT Chennai</div>
+        <h1>CineMood AI</h1>
+        <p class="subtitle">Full Stack Project Submission — Web Development Domain</p>
+        <div class="meta-row">
+            <span class="meta-item"><strong>Submitted by:</strong> Gowreesh V T</span>
+            <span class="meta-item"><strong>Date:</strong> 14 February 2026</span>
+            <span class="meta-item"><strong>Track:</strong> Full Stack</span>
+        </div>
+    </div>
+
+    <!-- ═══════════ 1. GITHUB REPO ═══════════ -->
+    <div class="section">
+        <div class="section-title">
+            <span class="num">1</span> GitHub Repository Link
+        </div>
+        <div class="card link-card">
+            <div class="link-icon">🔗</div>
+            <div class="link-info">
+                <div class="link-label">Repository</div>
+                <a class="link-url" href="https://github.com/Gowreesh-VT/AWS-Web-Dev" target="_blank">
+                    https://github.com/Gowreesh-VT/AWS-Web-Dev
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ 2. HOSTED LINK ═══════════ -->
+    <div class="section">
+        <div class="section-title">
+            <span class="num">2</span> Hosted Website Link
+        </div>
+        <div class="card link-card">
+            <div class="link-icon">🌐</div>
+            <div class="link-info">
+                <div class="link-label">Live Deployment</div>
+                <span class="link-url" style="color: var(--text-muted); font-style: italic;">
+                    https://aws-web-dev.vercel.app
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ 3. TECH STACK ═══════════ -->
+    <div class="section">
+        <div class="section-title">
+            <span class="num">3</span> Tech Stack Used
+        </div>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-category">Frontend</div>
+                <ul>
+                    <li>Next.js 15 (React 19, App Router)</li>
+                    <li>TypeScript</li>
+                    <li>Tailwind CSS 3</li>
+                    <li>Radix UI (Shadcn/ui components)</li>
+                    <li>Lucide React (Icons)</li>
+                </ul>
+            </div>
+            <div class="tech-card">
+                <div class="tech-category">Backend</div>
+                <ul>
+                    <li>Next.js API Routes (Route Handlers)</li>
+                    <li>MongoDB Atlas (Cloud Database)</li>
+                    <li>Mongoose ODM v9</li>
+                    <li>JWT Authentication (jsonwebtoken)</li>
+                    <li>bcryptjs (Password Hashing)</li>
+                </ul>
+            </div>
+            <div class="tech-card">
+                <div class="tech-category">AI & APIs</div>
+                <ul>
+                    <li>Google Gemini AI (Genkit)</li>
+                    <li>TMDB API (Movie Database)</li>
+                    <li>Mood-to-Genre AI Conversion</li>
+                </ul>
+            </div>
+            <div class="tech-card">
+                <div class="tech-category">Dev Tools</div>
+                <ul>
+                    <li>ESLint + TypeScript strict mode</li>
+                    <li>Turbopack (Dev Server)</li>
+                    <li>PostCSS</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ 4. API ENDPOINTS ═══════════ -->
+    <div class="section page-break">
+        <div class="section-title">
+            <span class="num">4</span> API Endpoints Description
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Endpoint</th>
+                        <th>Description</th>
+                        <th>Auth</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td class="endpoint-path">/api/auth/signup</td>
+                        <td>Register a new user with email, password, and name. Returns JWT token via HTTP-only cookie.</td>
+                        <td><span class="auth-badge auth-no">Public</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td class="endpoint-path">/api/auth/login</td>
+                        <td>Authenticate user with email & password. Validates credentials via bcrypt and returns JWT cookie.</td>
+                        <td><span class="auth-badge auth-no">Public</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td class="endpoint-path">/api/auth/logout</td>
+                        <td>Clears the JWT authentication cookie to log the user out.</td>
+                        <td><span class="auth-badge auth-no">Public</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-get">GET</span></td>
+                        <td class="endpoint-path">/api/auth/me</td>
+                        <td>Returns the currently authenticated user's profile (excluding password) by verifying the JWT token.</td>
+                        <td><span class="auth-badge auth-yes">JWT</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td class="endpoint-path">/api/recommendations</td>
+                        <td>Accepts a mood string, uses Gemini AI to convert it into genres, then fetches matching movies from TMDB. Saves to user history if authenticated.</td>
+                        <td><span class="auth-badge auth-yes">JWT</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-get">GET</span></td>
+                        <td class="endpoint-path">/api/favorites</td>
+                        <td>Returns the authenticated user's saved favorite movies list.</td>
+                        <td><span class="auth-badge auth-yes">JWT</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td class="endpoint-path">/api/favorites</td>
+                        <td>Adds a movie to the user's favorites. Prevents duplicates.</td>
+                        <td><span class="auth-badge auth-yes">JWT</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-delete">DELETE</span></td>
+                        <td class="endpoint-path">/api/favorites?id={movieId}</td>
+                        <td>Removes a movie from the user's favorites by movie ID.</td>
+                        <td><span class="auth-badge auth-yes">JWT</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-get">GET</span></td>
+                        <td class="endpoint-path">/api/history</td>
+                        <td>Returns the user's mood search history sorted by most recent first.</td>
+                        <td><span class="auth-badge auth-yes">JWT</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ═══════════ 5. HOW TO RUN LOCALLY ═══════════ -->
+    <div class="section">
+        <div class="section-title">
+            <span class="num">5</span> How to Run Locally
+        </div>
+        <div class="code-block">
+            <span class="comment"># 1. Clone the repository</span><br>
+            <span class="cmd">git clone https://github.com/Gowreesh-VT/AWS-Web-Dev.git</span><br>
+            <span class="cmd">cd AWS-Web-Dev</span><br><br>
+
+            <span class="comment"># 2. Install dependencies</span><br>
+            <span class="cmd">npm install</span><br><br>
+
+            <span class="comment"># 3. Create a .env.local file with the following variables</span><br>
+            TMDB_API_KEY=your_tmdb_api_key<br>
+            GEMINI_API_KEY=your_gemini_api_key<br>
+            MONGODB_URI=your_mongodb_atlas_connection_string<br>
+            JWT_SECRET=your_jwt_secret<br><br>
+
+            <span class="comment"># 4. Whitelist your IP on MongoDB Atlas</span><br>
+            <span class="comment">#    Go to MongoDB Atlas → Network Access → Add IP Address</span><br><br>
+
+            <span class="comment"># 5. Start the development server</span><br>
+            <span class="cmd">npm run dev</span><br><br>
+
+            <span class="comment"># App runs at http://localhost:3000</span>
+        </div>
+    </div>
+
+    <!-- ═══════════ 6. SCREENSHOTS ═══════════ -->
+    <div class="section page-break">
+        <div class="section-title">
+            <span class="num">6</span> Screenshots of All Webpages
+        </div>
+        <div class="screenshots-grid">
+
+            <div class="screenshot-item no-break">
+                <img src="images/Landing Page.png" alt="Landing Page">
+                <div class="screenshot-caption">
+                    <span class="caption-dot"></span> Landing Page — Hero section with CTA to Login / Sign Up
+                </div>
+            </div>
+
+            <div class="screenshot-item no-break">
+                <img src="images/Login.png" alt="Login Page">
+                <div class="screenshot-caption">
+                    <span class="caption-dot"></span> Login Page — Email & password authentication form
+                </div>
+            </div>
+
+            <div class="screenshot-item no-break">
+                <img src="images/Home Page.png" alt="Dashboard / Home Page">
+                <div class="screenshot-caption">
+                    <span class="caption-dot"></span> Dashboard — Mood input form where users describe how they feel
+                </div>
+            </div>
+
+            <div class="screenshot-item no-break">
+                <img src="images/Search.png" alt="Search Results">
+                <div class="screenshot-caption">
+                    <span class="caption-dot"></span> Search Results — AI-generated genre pills + TMDB movie recommendations
+                </div>
+            </div>
+
+            <div class="screenshot-item no-break">
+                <img src="images/Favourites.png" alt="Favourites Page">
+                <div class="screenshot-caption">
+                    <span class="caption-dot"></span> Favourites — User's saved movies collection
+                </div>
+            </div>
+
+            <div class="screenshot-item no-break">
+                <img src="images/History.png" alt="Search History Page">
+                <div class="screenshot-caption">
+                    <span class="caption-dot"></span> History — Past mood searches with timestamps and matched genres
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════ 7. DESIGN THEME ═══════════ -->
+    <div class="section page-break">
+        <div class="section-title">
+            <span class="num">7</span> Design Theme & Rationale
+        </div>
+        <div class="design-card">
+            <h3>🎬 Dark Cinematic Theme</h3>
+            <p>
+                CineMood AI uses a <strong>dark-mode-first cinematic design</strong> inspired by modern streaming platforms like Netflix and Letterboxd. The dark background (#0a0a0f) reduces eye strain during extended browsing sessions and makes movie poster artwork pop with vibrant contrast — exactly what users expect in a movie discovery app.
+            </p>
+            <p>
+                The color palette centers around <strong>deep blacks, muted grays, and purple-violet accents</strong>, creating a premium, immersive feel that mirrors the atmosphere of a movie theater. Typography uses clean, modern Inter font with gradient text effects on hero elements to add visual sophistication.
+            </p>
+
+            <h3 style="margin-top: 24px;">Why This Design?</h3>
+
+            <div class="design-features">
+                <div class="design-feature">
+                    <div class="feat-title">🌙 Dark Mode First</div>
+                    <div class="feat-desc">Movie posters and artwork stand out best against dark backgrounds, creating an immersive browsing experience similar to cinema.</div>
+                </div>
+                <div class="design-feature">
+                    <div class="feat-title">🧠 AI-Centric UX</div>
+                    <div class="feat-desc">The mood input is front and center on the dashboard — a single text field that makes the AI interaction feel natural and effortless.</div>
+                </div>
+                <div class="design-feature">
+                    <div class="feat-title">🎯 Minimal & Functional</div>
+                    <div class="feat-desc">Clean card-based layouts with generous spacing. No visual clutter — users focus purely on discovering movies that match their mood.</div>
+                </div>
+                <div class="design-feature">
+                    <div class="feat-title">📱 Responsive Grid</div>
+                    <div class="feat-desc">Movie cards use adaptive grid layouts (2–5 columns) that reflow gracefully across all screen sizes from mobile to desktop.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <div class="footer">
+        <p>CineMood AI — Built with ❤️ by Gowreesh V T | AWS Cloud Club · VIT Chennai</p>
+    </div>
+
+</body>
+</html>
