@@ -3,8 +3,6 @@ import { convertMoodToGenres } from '@/ai/flows/mood-to-genre-converter';
 import { fetchMoviesByGenres, getGenreIds } from '@/lib/tmdb';
 import { getCurrentUser } from '@/lib/auth';
 import type { SearchHistoryItem } from '@/lib/types';
-import { v4 as uuidv4 } from 'uuid'; // Actually we don't have uuid installed, let's use random string or install it. 
-// Easier to just use Math.random for now to avoid installing another package, or just Date.now().
 
 export async function POST(request: Request) {
   try {
